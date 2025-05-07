@@ -370,9 +370,8 @@ def test_cspace_convert_long_paths():
     )
 
 def test_CIECAM02_subset_error_checking():
-    from nose.tools import assert_raises
-    assert_raises(ValueError,
-                  cspace_convert, np.ones((5, 4)), "JCh", "XYZ100")
+    from pytest import raises
+    raises(ValueError, cspace_convert, np.ones((5, 4)), "JCh", "XYZ100")
 
 def test_name_aliases():
     # "CAM02-UCS" is not a primitive name, but rather an alias
@@ -399,8 +398,6 @@ def test_name_aliases():
                         "ciecam02_space": weird_space,
                         "luoetal2006_space": CAM02UCS}))
 
-    from nose.tools import assert_raises
-    assert_raises(ValueError,
-                  cspace_convert, [1, 2, 3], "sRGB255", object())
-    assert_raises(ValueError,
-                  cspace_convert, [1, 2, 3], "sRGB255", "qwertyuiop")
+    from pytest import raises
+    raises(ValueError, cspace_convert, [1, 2, 3], "sRGB255", object())
+    raises(ValueError, cspace_convert, [1, 2, 3], "sRGB255", "qwertyuiop")

@@ -62,7 +62,7 @@ Dependencies:
   * NumPy
 
 Developer dependencies (only needed for hacking on source):
-  * nose: needed to run tests
+  * pytest: needed to run tests
 
 License:
   MIT, see LICENSE.txt for details.

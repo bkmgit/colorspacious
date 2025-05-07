@@ -46,13 +46,12 @@ def check_node(node, allowed_placeholders):
             assert_(v in allowed_placeholders)
 
 def test_check_node():
-    from nose.tools import assert_raises
-    assert_raises(AssertionError, check_node, {}, [])
+    from pytest import raises
+    raises(AssertionError, check_node, {}, [])
     check_node({"name": "asdf"}, [])
-    assert_raises(AssertionError, check_node, {"name": 1}, [])
+    raises(AssertionError, check_node, {"name": 1}, [])
     check_node({"name": "asdf", "a": "b"}, [])
-    assert_raises(AssertionError, check_node,
-                  {"name": "asdf", "a": MATCH}, [ANY])
+    raises(AssertionError, check_node, {"name": "asdf", "a": MATCH}, [ANY])
     check_node({"name": "asdf", "a": ANY, "b": "c"}, [ANY])
 
 # edge_node = edge node, can have MATCH or ANY or concrete values
@@ -92,7 +91,7 @@ def check_edge(edge):
             assert_(set([start_v, end_v]) == set([ANY, NOTHING]))
 
 def test_check_edge():
-    from nose.tools import assert_raises
+    from pytest import raises
 
     check_edge(Edge({"name": "foo"}, {"name": "bar"}, "fake transform"))
     check_edge(Edge({"name": "foo", "start_any": ANY, "match": MATCH},
@@ -110,7 +109,7 @@ def test_check_edge():
             Edge({"name": "foo", "a": "asdf"}, {"name": "bar", "a": MATCH},
                  "fake transform"),
             ]:
-        assert_raises(AssertionError, check_edge, bad)
+        raises(AssertionError, check_edge, bad)
 
 def check_path(path):
     for node in path.nodes:
@@ -129,7 +128,7 @@ def check_path(path):
     assert_(len(path.nodes) == len(path.transforms) + 1)
 
 def test_check_path():
-    from nose.tools import assert_raises
+    from pytest import raises
 
     check_path(Path(({"name": "foo"}, {"name": "bar"}), ("t1",)))
     check_path(Path(({"name": "foo"},
@@ -154,7 +153,7 @@ def test_check_path():
             Path([{"name": "foo"}, {"name": "bar"}], []),
             Path([{"name": "foo"}, {"name": "bar"}], ["t1", "t2"]),
             ]:
-        assert_raises(AssertionError, check_path, bad)
+        raises(AssertionError, check_path, bad)
 
 ################################################################
 # Dict manipulation utilities
@@ -509,16 +508,15 @@ def transform_kwargs(start_concrete_node, end_concrete_node):
     return kwargs
 
 def test_transform_kwargs():
-    from nose.tools import assert_raises
+    from pytest import raises
 
     assert_(transform_kwargs({"name": "start"}, {"name": "end"}) == {})
     assert_(transform_kwargs(
         {"name": "start", "a": 1, "b": 2},
         {"name": "end", "b": 2, "c": 3}
         ) == {"a": 1, "b": 2, "c": 3})
-    assert_raises(AssertionError, transform_kwargs,
-                  {"name": "start", "a": 1},
-                  {"name": "end",   "a": 2})
+    raises(AssertionError, transform_kwargs, {"name": "start", "a": 1},
+                                             {"name": "end",   "a": 2})
 
 def path_matches(path, desired_concrete_start, desired_concrete_end):
     # check that path[0] and path[-1] match concrete_start and concrete_end
