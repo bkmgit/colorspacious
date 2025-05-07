@@ -20,7 +20,8 @@ before_install:
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION
   - source activate testenv
   - conda install pip pynose coverage numpy scipy matplotlib Cython
-  - pip install pynose-cov
+# nose-cov requires nose which is no longer maintained
+# - pip install nose-cov
 install:
   - python setup.py sdist
   - mkdir empty
@@ -28,9 +29,11 @@ install:
   - pip install ../dist/*
   - INSTALLDIR=$(python -c "import os; import colorspacious; print(os.path.dirname(colorspacious.__file__))")
 script:
-  - pynose --all-modules --with-cov --cov-conf ../.coveragerc --cov-report term-missing --cov ${INSTALLDIR} colorspacious
-after_success:
-  - pip install codecov && codecov
+#  coverage requires nose-cov which uses nose that is no longer maintained
+#  - pynose --all-modules --with-cov --cov-conf ../.coveragerc --cov-report term-missing --cov ${INSTALLDIR} colorspacious
+   - pynose --all-modules colorspacious
+#after_success:
+#  - pip install codecov && codecov
 notifications:
   email:
   - njs@pobox.com
