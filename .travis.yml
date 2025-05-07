@@ -1,8 +1,11 @@
 language: python
 python:
-  - 2.7
-  - 3.6
-  - 3.7
+  - 3.9
+  - 3.10
+  - 3.11
+  - 3.12
+  - 3.13
+  - 3.14
 before_install:
   # Escape Travis virtualenv
   - deactivate
@@ -16,8 +19,8 @@ before_install:
   - conda info -a
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION
   - source activate testenv
-  - conda install pip nose coverage numpy scipy matplotlib Cython
-  - pip install nose-cov
+  - conda install pip pynose coverage numpy scipy matplotlib Cython
+  - pip install pynose-cov
 install:
   - python setup.py sdist
   - mkdir empty
@@ -25,7 +28,7 @@ install:
   - pip install ../dist/*
   - INSTALLDIR=$(python -c "import os; import colorspacious; print(os.path.dirname(colorspacious.__file__))")
 script:
-  - nosetests --all-modules --with-cov --cov-conf ../.coveragerc --cov-report term-missing --cov ${INSTALLDIR} colorspacious
+  - pynose --all-modules --with-cov --cov-conf ../.coveragerc --cov-report term-missing --cov ${INSTALLDIR} colorspacious
 after_success:
   - pip install codecov && codecov
 notifications:

@@ -89,9 +89,9 @@ def test_standard_illuminant_XYZ100():
         standard_illuminant_XYZ100("D65", observer="CIE 1964 10 deg"),
         [ 94.811, 100, 107.304])
 
-    from nose.tools import assert_raises
-    assert_raises(ValueError, standard_illuminant_XYZ100, "D65",
-                  observer="something else")
+    from unittest import TestCase as tc
+    tc().assertRaises(ValueError, standard_illuminant_XYZ100, "D65",
+                     observer="something else")
 
 # Convenience function
 def as_XYZ100_w(whitepoint):
@@ -120,6 +120,6 @@ def test_as_XYZ100_w():
     assert np.allclose(as_XYZ100_w([1, 2, 3]), [1, 2, 3])
     assert as_XYZ100_w([1, 2, 3]).dtype == float
 
-    from nose.tools import assert_raises
-    assert_raises(KeyError, as_XYZ100_w, "D666")
-    assert_raises(ValueError, as_XYZ100_w, [1, 2, 3, 4])
+    from unittest import TestCase as tc
+    tc().assertRaises(KeyError, as_XYZ100_w, "D666")
+    tc().assertRaises(ValueError, as_XYZ100_w, [1, 2, 3, 4])

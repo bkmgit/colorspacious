@@ -471,41 +471,41 @@ def test_inverse():
                     for XYZ100 in XYZ100_values:
                         check_roundtrip(vc, XYZ100)
 
-def test_misc():
-    from nose.tools import assert_raises
+#def test_misc():
+    from unittest import TestCase as tc
     # Only one whitepoint can be specified
-    assert_raises(ValueError, CIECAM02Space,
-                  [[20, 100, 80], [80, 100, 20]], 20, 30)
+    tc().assertRaises(ValueError, CIECAM02Space,
+                      [[20, 100, 80], [80, 100, 20]], 20, 30)
 
     # smoke test
     repr(CIECAM02Space.sRGB)
     repr(CIECAM02Space("D65", 20, 4, surround=CIECAM02Surround.DIM))
 
     # input shape check
-    assert_raises(ValueError,
-                  CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
-                  np.ones((10, 4)))
+    tc().assertRaises(ValueError,
+                      CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
+                      np.ones((10, 4)))
 
     # on_negative_A validity check
-    assert_raises(ValueError,
-                  CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
-                  np.ones((10, 3)),
-                  on_negative_A="asdfasdf")
+    tc().assertRaises(ValueError,
+                      CIECAM02Space.sRGB.XYZ100_to_CIECAM02,
+                      np.ones((10, 3)),
+                      on_negative_A="asdfasdf")
 
 def test_exactly_one():
-    from nose.tools import assert_raises
+    from unittest import TestCase as tc
     vc = CIECAM02Space.sRGB
 
     # Redundant specifications not allowed
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, Q=1)
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, M=1)
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, s=1)
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, H=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, Q=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, M=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, s=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1, h=1, H=1)
 
     # Underspecified colors not allowed either
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1)
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, J=1, h=1)
-    assert_raises(ValueError, vc.CIECAM02_to_XYZ100, C=1, h=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, C=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, J=1, h=1)
+    tc().assertRaises(ValueError, vc.CIECAM02_to_XYZ100, C=1, h=1)
 
 def test_vectorized():
     vc = CIECAM02Space.sRGB
@@ -521,20 +521,20 @@ def test_vectorized():
     check_roundtrip(vc, XYZ100s)
 
 def test_on_negative_A():
-    from nose.tools import assert_raises
+    from unittest import TestCase as tc
 
     vc = CIECAM02Space("D65", 20, 30)
     bad_XYZ100 = [8.71292997, 2.02183974, 83.26198455]
     good_XYZ100 = [20, 30, 40]
 
-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100)
-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02,
-                  [bad_XYZ100, good_XYZ100])
-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100,
-                  on_negative_A="raise")
-    assert_raises(NegativeAError, vc.XYZ100_to_CIECAM02,
-                  [bad_XYZ100, good_XYZ100],
-                  on_negative_A="raise")
+    tc().assertRaises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100)
+    tc().assertRaises(NegativeAError, vc.XYZ100_to_CIECAM02,
+                      [bad_XYZ100, good_XYZ100])
+    tc().assertRaises(NegativeAError, vc.XYZ100_to_CIECAM02, bad_XYZ100,
+                      on_negative_A="raise")
+    tc().assertRaises(NegativeAError, vc.XYZ100_to_CIECAM02,
+                      [bad_XYZ100, good_XYZ100],
+                      on_negative_A="raise")
 
     bad_CIECAM02 = vc.XYZ100_to_CIECAM02(bad_XYZ100, on_negative_A="nan")
     for bad_attr in "JCQMs":
